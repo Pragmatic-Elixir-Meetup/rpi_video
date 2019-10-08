@@ -1,0 +1,9 @@
+[package]
+name = "rpi_video"
+version = "0.0.1"
+
+[[bin]]
+name = "real_rpi_video"
+path = "src/real_rpi_video.rs"
+
+[dependencies]

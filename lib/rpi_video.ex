@@ -1,0 +1,2 @@
+defmodule RpiVideo do
+end

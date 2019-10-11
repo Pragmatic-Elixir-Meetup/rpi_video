@@ -11,3 +11,9 @@ name = "real_rpi_video"
 path = "src/real_rpi_video.rs"
 
 [dependencies]
+byteorder = "1"
+eetf = "0.4"
+mio = "0.6"
+
+[target.armv7-unknown-linux-gnueabihf.dependencies]
+rpi-video-rs = { path = "../rpi-video-rs" }

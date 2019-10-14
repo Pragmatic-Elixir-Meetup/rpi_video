@@ -7,6 +7,6 @@ fn main() {
     let mut param = CaptureParam::default();
     param.mock = true;
 
-    let main_loop = CaptureMainLoop::new(param);
+    let mut main_loop = CaptureMainLoop::new(param);
     main_loop.run();
 }

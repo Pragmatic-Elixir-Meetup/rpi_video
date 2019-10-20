@@ -32,8 +32,8 @@ defmodule RpiVideo.MockServer do
   end
 
   @impl true
-  def handle_cast({:start_record, nil}, %{port: port} = state) do
-    data = :erlang.term_to_binary("start_record")
+  def handle_cast({:elixir_start_record, nil}, %{port: port} = state) do
+    data = :erlang.term_to_binary("elixir_start_record")
     len = byte_size(data)
 
     buf = [<<len::big-unsigned-integer-size(64)>>, data]
@@ -45,15 +45,7 @@ defmodule RpiVideo.MockServer do
   end
 
   @impl true
-  def handle_info({_port, {:record_started, <<data::binary>>}}, state) do
-    file_path = :erlang.binary_to_term(data)
-
-    IO.puts(:stderr, "elixir_MOCK_server: Continues recording the video - `#{file_path}`")
-    {:noreply, state}
-  end
-
-  @impl true
-  def handle_info({_port, {:record_ended, <<data::binary>>}}, state) do
+  def handle_info({_port, {:rust_record_complete, <<data::binary>>}}, state) do
     file_path = :erlang.binary_to_term(data)
 
     IO.puts(:stderr, "elixir_MOCK_server: Finishes recording the video - `#{file_path}`")
@@ -67,7 +59,7 @@ defmodule RpiVideo.MockServer do
   end
 
   defp start_record_on(pid) when is_pid(pid),
-  do: GenServer.cast(pid, {:start_record, nil})
+  do: GenServer.cast(pid, {:elixir_start_record, nil})
   defp start_record_on(nil),
   do: raise("#{__MODULE__} has not been started")
 end

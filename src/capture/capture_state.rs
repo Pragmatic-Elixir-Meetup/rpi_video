@@ -36,12 +36,18 @@ impl CaptureState {
         self.schedule();
     }
 
-    pub fn recv(&self) -> String {
+    pub fn recv(&mut self) -> String {
         if self.idle() {
             return "".to_string();
         }
 
-        self.channel_receiver.as_ref().unwrap().recv().unwrap()
+        let filename = self.channel_receiver.as_ref().unwrap().recv().unwrap();
+
+        // Schedules for another task after receiving.
+        self.channel_receiver = None;
+        self.schedule();
+
+        filename
     }
 
     pub fn set_main_loop_injector(

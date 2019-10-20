@@ -128,7 +128,7 @@ impl CaptureMainLoop {
         }
     }
 
-    fn handle_record_complete(&self) {
+    fn handle_record_complete(&mut self) {
         let video_file_path = self.state.recv();
 
         let mut encoded_data = Vec::new();

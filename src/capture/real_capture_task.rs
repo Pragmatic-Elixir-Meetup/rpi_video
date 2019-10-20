@@ -11,13 +11,11 @@ impl RealCaptureTask {
 }
 
 impl CaptureTask for RealCaptureTask {
-    fn run(&self) {
+    fn run(&self) -> String {
 
         // TODO
 
-    }
-
-    fn complete_message(&self) -> String {
         String::new()
+
     }
 }

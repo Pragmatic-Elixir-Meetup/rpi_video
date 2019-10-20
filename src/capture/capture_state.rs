@@ -71,12 +71,9 @@ impl CaptureState {
         self.channel_receiver = Some(receiver);
 
         thread::spawn(move || {
-            (*task).run();
-
+            let filename = (*task).run();
             injector.activate();
-
-            let message = (*task).complete_message();
-            sender.send(message).unwrap();
+            sender.send(filename).unwrap();
         });
     }
 }

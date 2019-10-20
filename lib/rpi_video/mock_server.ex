@@ -45,7 +45,7 @@ defmodule RpiVideo.MockServer do
   end
 
   @impl true
-  def handle_info({_port, {:rust_record_complete, <<data::binary>>}}, state) do
+  def handle_info({_port, {:data, <<data::binary>>}}, state) do
     file_path = :erlang.binary_to_term(data)
 
     IO.puts(:stderr, "elixir_MOCK_server: Finishes recording the video - `#{file_path}`")

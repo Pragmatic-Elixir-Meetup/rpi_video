@@ -1,4 +1,3 @@
-extern crate byteorder;
 extern crate eetf;
 extern crate libc;
 extern crate nix;
@@ -7,7 +6,6 @@ use std::io::{Cursor, Read, Stdin, Write, stdin, stdout};
 use std::os::unix::io::{AsRawFd, RawFd};
 use std::str;
 
-use self::byteorder::{BigEndian, WriteBytesExt};
 use self::eetf::{Atom, Term};
 use self::nix::errno::Errno;
 use self::nix::sys::select::{FdSet, select};
@@ -138,7 +136,6 @@ impl CaptureMainLoop {
         term.encode(&mut encoded_data).unwrap();
 
         let mut port_sender = stdout();
-        port_sender.write_u64::<BigEndian>(encoded_data.len() as u64).unwrap();
         port_sender.write_all(&encoded_data).unwrap();
         port_sender.flush().unwrap();
     }

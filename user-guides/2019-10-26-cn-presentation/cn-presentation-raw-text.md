@@ -12,11 +12,11 @@ steven.gu@letote.cn
 自我介绍
 
 1. Rails Coder
-2. 关注 Rust 的嵌入式应用
+2. 关注 Rust 的嵌入式开发
 
 ###
 
-Letote 应用
+Letote 的应用
 
 1. RFID 设备标识衣服或者首饰
 2. （未来可能）在仓库流程上的视频应用
@@ -51,11 +51,11 @@ https://github.com/nix-rust/nix
 
 1. rpi-mmal-rs:
 
-https://github.com/silathdiir/rpi-mmal-rs
+https://github.com/Pragmatic-Elixir-Meetup/rpi-mmal-rs
 
 2. rpi-video-rs:
 
-https://github.com/silathdiir/rpi-video-rs
+https://github.com/Pragmatic-Elixir-Meetup/rpi-video-rs
 
 3. rpi_video (Prepare for open-source)
 

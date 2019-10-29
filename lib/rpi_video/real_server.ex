@@ -2,11 +2,17 @@ defmodule RpiVideo.RealServer do
   use GenServer
 
   def start do
-    GenServer.start_link(__MODULE__, %{})
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   def stop do
     GenServer.stop(__MODULE__)
+  end
+
+  def record do
+    __MODULE__
+    |> GenServer.whereis()
+    |> start_record_on()
   end
 
   @impl true
@@ -15,7 +21,6 @@ defmodule RpiVideo.RealServer do
 
     port =
       Port.open({:spawn_executable, executable}, [
-        {:packet, 2},
         :binary,
         :exit_status,
         :use_stdio
@@ -27,19 +32,23 @@ defmodule RpiVideo.RealServer do
   end
 
   @impl true
-  def handle_info({_port, {:start, <<data::binary>>}}, state) do
-    file_path = :erlang.binary_to_term(data)
+  def handle_cast({:elixir_start_record, nil}, %{port: port} = state) do
+    data = :erlang.term_to_binary("elixir_start_record")
+    len = byte_size(data)
 
-    IO.puts("elixir_REAL_server: Starts to record video - #{file_path}")
+    buf = [<<len::big-unsigned-integer-size(64)>>, data]
+    Port.command(port, buf)
+
+    IO.puts(:stderr, "elixir_REAL_server: Starts to record a new video")
 
     {:noreply, state}
   end
 
   @impl true
-  def handle_info({_port, {:end, <<data::binary>>}}, state) do
+  def handle_info({_port, {:data, <<data::binary>>}}, state) do
     file_path = :erlang.binary_to_term(data)
 
-    IO.puts("elixir_REAL_server: Finishes recording video - #{file_path}")
+    IO.puts(:stderr, "elixir_REAL_server: Finishes recording the video - `#{file_path}`")
 
     {:noreply, state}
   end
@@ -48,4 +57,9 @@ defmodule RpiVideo.RealServer do
   def handle_info({_, {:exit_status, status}}, state) do
     {:stop, {:exit, status}, state}
   end
+
+  defp start_record_on(pid) when is_pid(pid),
+  do: GenServer.cast(pid, {:elixir_start_record, nil})
+  defp start_record_on(nil),
+  do: raise("#{__MODULE__} has not been started")
 end

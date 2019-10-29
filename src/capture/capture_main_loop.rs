@@ -16,18 +16,21 @@ use self::nix::{Error, fcntl};
 use crate::capture::capture_main_loop_injector::CaptureMainLoopInjector;
 use crate::capture::capture_param::CaptureParam;
 use crate::capture::capture_state::CaptureState;
+use crate::capture::capture_task::CaptureTask;
 
-pub struct CaptureMainLoop {
-    param: CaptureParam,
-    state: CaptureState,
+pub struct CaptureMainLoop<T>
+    where T: Fn() -> Box<dyn CaptureTask + Send>
+{
+    state: CaptureState<T>,
     pipe_fds: Option<(RawFd, RawFd)>,
 }
 
-impl CaptureMainLoop {
-    pub fn new(param: CaptureParam) -> Self {
+impl<T> CaptureMainLoop<T>
+    where T: Fn() -> Box<dyn CaptureTask + Send>
+{
+    pub fn new(param: CaptureParam<T>) -> Self {
         Self {
-            param: param,
-            state: CaptureState::new(),
+            state: CaptureState::new(param),
             pipe_fds: None,
         }
     }
@@ -129,7 +132,7 @@ impl CaptureMainLoop {
     }
 
     fn handle_record_complete(&mut self) {
-        let video_file_path = self.state.recv();
+        let video_file_path = self.state.recv().unwrap();
 
         let mut encoded_data = Vec::new();
         let term = Term::from(Atom::from(video_file_path));
@@ -166,15 +169,13 @@ impl CaptureMainLoop {
     }
 
     fn run_port_command_start_record(&mut self) {
-        if self.param.mock {
-            self.state.add_mock_task();
-        } else {
-            self.state.add_real_task();
-        }
+        self.state.add_task();
     }
 }
 
-impl Drop for CaptureMainLoop {
+impl<T> Drop for CaptureMainLoop<T>
+    where T: Fn() -> Box<dyn CaptureTask + Send>
+{
     fn drop(&mut self) {
         self.destroy_all();
     }

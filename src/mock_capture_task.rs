@@ -27,11 +27,11 @@ impl MockCaptureTask {
 }
 
 impl CaptureTask for MockCaptureTask {
-    fn run(&self) -> String {
+    fn run(&self) -> Result<String, String> {
         // Simply sleeps five seconds for emulating record process.
         let seconds = Duration::new(5, 0);
         sleep(seconds);
 
-        self.gen_filename()
+        Ok(self.gen_filename())
     }
 }

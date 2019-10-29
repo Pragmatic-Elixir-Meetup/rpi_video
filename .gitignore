@@ -26,3 +26,6 @@ rpi_video-*.tar
 **/*.rs.bk
 /target/
 priv/release/
+
+*.swp
+.DS_Store

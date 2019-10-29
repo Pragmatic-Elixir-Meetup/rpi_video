@@ -1,3 +1,3 @@
 pub trait CaptureTask {
-    fn run(&self) -> String;
+    fn run(&self) -> Result<String, String>;
 }

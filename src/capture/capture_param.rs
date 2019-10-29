@@ -1,12 +1,17 @@
-#[derive(Debug, Clone)]
-pub struct CaptureParam {
-    pub mock: bool,
+use crate::capture::capture_task::CaptureTask;
+
+pub struct CaptureParam<T>
+    where T: Fn() -> Box<dyn CaptureTask + Send>
+{
+    pub create_task: T,
 }
 
-impl Default for CaptureParam {
-    fn default() -> Self {
+impl<T> CaptureParam<T>
+    where T: Fn() -> Box<dyn CaptureTask + Send>
+{
+    pub fn new(create_task: T) -> Self {
         Self {
-            mock: false,
+            create_task: create_task,
         }
     }
 }

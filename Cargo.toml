@@ -1,6 +1,13 @@
 [package]
 name = "rpi_video"
 version = "0.0.1"
+authors = ["Steven Gu <asongala@163.com>"]
+license = "MIT"
+description = "Elixir version of H264 video record on Raspberry Pi"
+homepage = "https://github.com/Pragmatic-Elixir-Meetup/rpi_video"
+documentation = "https://github.com/Pragmatic-Elixir-Meetup/rpi_video"
+repository = "https://github.com/Pragmatic-Elixir-Meetup/rpi_video"
+edition = "2018"
 
 [[bin]]
 name = "mock_rpi_video"

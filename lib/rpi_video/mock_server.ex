@@ -59,7 +59,8 @@ defmodule RpiVideo.MockServer do
   end
 
   defp start_record_on(pid) when is_pid(pid),
-  do: GenServer.cast(pid, {:elixir_start_record, nil})
+    do: GenServer.cast(pid, {:elixir_start_record, nil})
+
   defp start_record_on(nil),
-  do: raise("#{__MODULE__} has not been started")
+    do: raise("#{__MODULE__} has not been started")
 end

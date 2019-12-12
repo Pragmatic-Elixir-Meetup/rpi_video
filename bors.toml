@@ -1,3 +1,4 @@
 status = ["build (ubuntu-latest, 22.x, 1.9.x)"]
 
-timeout_sec = 600
+timeout_sec = 1800
+delete_merged_branches = true
